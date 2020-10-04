@@ -23,5 +23,6 @@ const io = socketIO.listen(server); //http://localhost:4000/socket.io/socket.io.
 io.on("connection", (socket) => {
   //socket.emit("hello");
   //setTimeout(() => socket.emit("hello"), 5000); //5초 뒤에 발생
-  setTimeout(() => socket.broadcast.emit("hello"), 5000); //접속한 소켓을 제외한 다른 모든 소켓에 전달
+  //setTimeout(() => socket.broadcast.emit("hello"), 5000); //접속한 소켓을 제외한 다른 모든 소켓에 전달
+  socket.on("helloGuys", () => console.log("the client sait hello"));
 });
