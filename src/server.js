@@ -14,4 +14,7 @@ app.get("/", (req, res) => res.render("home"));
 const handleListening = () =>
   console.log(`Server running: http://localhost:${PORT}`);
 
-app.listen(PORT, handleListening);
+//ws(websocket)과 HTTP는 같은 포트 사용이 가능하다.
+const server = app.listen(PORT, handleListening);
+
+const io = socketIO(server); //http://localhost:4000/socket.io/socket.io.js로 접속하여 연결 확인
