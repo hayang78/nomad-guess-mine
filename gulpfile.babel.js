@@ -4,12 +4,19 @@ import sass from "gulp-sass";
 import autoprefixer from "gulp-autoprefixer";
 import minifyCSS from "gulp-csso";
 import del from "del";
+import bro from "gulp-browserify";
+import babel from "babelify";
 
 const paths = {
   styles: {
     src: "assets/scss/styles.scss", //소스파일명
     dest: "src/static/styles", //목적지 경로
     watch: "assets/scss/**/*.scss",
+  },
+  js: {
+    src: "assets/js/main.js",
+    dest: "src/static/js",
+    watch: "assets/static/js/**/*.js",
   },
 };
 
@@ -27,9 +34,26 @@ const styles = () =>
     .pipe(minifyCSS())
     .pipe(gulp.dest(paths.styles.dest));
 
-const watchFiles = () => gulp.watch(paths.styles.watch, styles); //watch경로의 파일이 변경되면 styles()를 실행
+const js = () =>
+  gulp
+    .src(paths.js.src)
+    .pipe(
+      bro({
+        transform: [
+          babel.configure({
+            presets: ["@babel/preset-env"],
+          }),
+        ],
+      })
+    )
+    .pipe(gulp.dest(paths.js.dest));
+
+const watchFiles = () => {
+  gulp.watch(paths.styles.watch, styles); //watch경로의 파일이 변경되면 styles()를 실행
+  gulp.watch(paths.js.watch, js);
+};
 
 //Del을 사용하여 기존에 생성된 static을 삭제하고 다시 생성
-const dev = gulp.series(clean, styles, watchFiles); // or clean, styles, watchFiles
+const dev = gulp.series(clean, styles, js, watchFiles); // or clean, styles, watchFiles
 
 export default dev; //gulp만 실행해도 dev가 실행되도록 default로 지정
