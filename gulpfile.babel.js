@@ -13,12 +13,10 @@ const paths = {
   },
 };
 
-function clean() {
-  return del("src/static"); // or [src/static]
-}
+const clean = () => del("src/static"); // or [src/static]
 
-function styles() {
-  return gulp
+const styles = () =>
+  gulp
     .src(paths.styles.src)
     .pipe(sass())
     .pipe(
@@ -28,12 +26,10 @@ function styles() {
     )
     .pipe(minifyCSS())
     .pipe(gulp.dest(paths.styles.dest));
-}
 
-function watchFiles() {
-  gulp.watch(paths.styles.watch, styles); //watch경로의 파일이 변경되면 styles()를 실행
-}
+const watchFiles = () => gulp.watch(paths.styles.watch, styles); //watch경로의 파일이 변경되면 styles()를 실행
 
+//Del을 사용하여 기존에 생성된 static을 삭제하고 다시 생성
 const dev = gulp.series(clean, styles, watchFiles); // or clean, styles, watchFiles
 
 export default dev; //gulp만 실행해도 dev가 실행되도록 default로 지정
