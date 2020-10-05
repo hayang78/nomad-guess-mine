@@ -2,6 +2,7 @@
 import gulp from "gulp";
 import sass from "gulp-sass";
 import autoprefixer from "gulp-autoprefixer";
+import minifyCSS from "gulp-csso";
 
 const paths = {
   styles: {
@@ -19,5 +20,6 @@ export function styles() {
         cascade: false,
       })
     )
+    .pipe(minifyCSS())
     .pipe(gulp.dest(paths.styles.dest));
 }
