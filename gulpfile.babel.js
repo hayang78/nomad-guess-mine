@@ -22,6 +22,7 @@ const paths = {
 
 const clean = () => del("src/static"); // or [src/static]
 
+//scss를 css로 변환
 const styles = () =>
   gulp
     .src(paths.styles.src)
@@ -34,6 +35,7 @@ const styles = () =>
     .pipe(minifyCSS())
     .pipe(gulp.dest(paths.styles.dest));
 
+// js파일도 변환
 const js = () =>
   gulp
     .src(paths.js.src)
