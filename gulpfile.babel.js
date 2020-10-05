@@ -58,4 +58,6 @@ const watchFiles = () => {
 //Del을 사용하여 기존에 생성된 static을 삭제하고 다시 생성
 const dev = gulp.series(clean, styles, js, watchFiles); // or clean, styles, watchFiles
 
+export const build = gulp.series(clean, styles, js);
+
 export default dev; //gulp만 실행해도 dev가 실행되도록 default로 지정
