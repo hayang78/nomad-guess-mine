@@ -16,7 +16,7 @@ const paths = {
   js: {
     src: "assets/js/main.js",
     dest: "src/static/js",
-    watch: "assets/static/js/**/*.js",
+    watch: "assets/js/**/*.js",
   },
 };
 
