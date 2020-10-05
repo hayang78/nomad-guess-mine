@@ -23,7 +23,7 @@
   },
   "scripts": {
     "dev:server": "nodemon --exec babel-node src/server",
-    "build:styles": "gulp styles"
+    "dev:assets": "gulp"
   },
   "devDependencies": {
     "eslint-config-prettier": "^6.12.0",
