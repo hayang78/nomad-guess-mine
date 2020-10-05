@@ -1,5 +1,7 @@
+//파일명을 gulpfile.babel.js로 만들면 gulp가 자동으로 babelrc파일을 찾아서 그 설정대로 동작하게 해줌
 import gulp from "gulp";
 import sass from "gulp-sass";
+import autoprefixer from "gulp-autoprefixer";
 
 const paths = {
   styles: {
@@ -12,5 +14,10 @@ export function styles() {
   return gulp
     .src(paths.styles.src)
     .pipe(sass())
+    .pipe(
+      autoprefixer({
+        cascade: false,
+      })
+    )
     .pipe(gulp.dest(paths.styles.dest));
 }
