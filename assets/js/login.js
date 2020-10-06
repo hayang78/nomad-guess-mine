@@ -8,8 +8,9 @@ const LOGGED_IN = "loggedIn";
 const nickname = localStorage.getItem(NICKNAME);
 
 const logIn = (nickname) => {
-  const socket = io("/");
-  socket.emit("setNickname", { nickname });
+  // eslint-disable-next-line no-undef
+  window.socket = io("/"); //io는 어떻게 가져오는거지??
+  window.socket.emit(window.events.setNickname, { nickname });
 };
 
 if (nickname === null) {
