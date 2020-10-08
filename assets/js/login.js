@@ -1,3 +1,5 @@
+const { initSockets } = require("./sockets");
+
 const body = document.querySelector("body");
 const loginForm = document.getElementById("jsLogin");
 
@@ -9,8 +11,9 @@ const nickname = localStorage.getItem(NICKNAME);
 
 const logIn = (nickname) => {
   // eslint-disable-next-line no-undef
-  window.socket = io("/"); //io는 어떻게 가져오는거지??
-  window.socket.emit(window.events.setNickname, { nickname });
+  const socket = io("/"); //io는 어떻게 가져오는거지??
+  socket.emit(window.events.setNickname, { nickname });
+  initSockets(socket);
 };
 
 if (nickname === null) {
