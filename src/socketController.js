@@ -17,7 +17,12 @@ const socketController = (socket, io) => {
       inProgress = true;
       const leader = choooseLeader();
       word = chooseWord();
+      io.to(leader.id).emit(events.leaderNotif, { word });
+      superBroadcase(events.gameStarted);
     }
+  };
+  const endGame = () => {
+    inProgress = false;
   };
 
   socket.on(events.setNickname, ({ nickname }) => {
@@ -28,12 +33,17 @@ const socketController = (socket, io) => {
 
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
-    startGame();
+    if (sockets.length === 1) {
+      startGame();
+    }
   });
 
   socket.on(events.disconnect, () => {
     console.log("disconnet");
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
+    if (sockets.length === 1) {
+      endGame();
+    }
     broadcast(events.disconnected, { nickname: socket.nickname });
     //disconnect 이미 사용중인 이름이라 계속 반복 호출되니 꼭 다른 이름으로 broadcast해야함
     sendPlayerUpdate();
