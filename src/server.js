@@ -24,4 +24,4 @@ const server = app.listen(PORT, handleListening);
 
 const io = socketIO.listen(server); //http://localhost:4000/socket.io/socket.io.js로 접속하여 연결 확인
 
-io.on("connection", (socket) => socketController(socket));
+io.on("connection", (socket) => socketController(socket, io));
