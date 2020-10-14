@@ -23,13 +23,13 @@ ctx.lineWidth = 2.5;
 let painting = false;
 let filling = false;
 
-function stopPainting() {
+const stopPainting = () => {
   painting = false;
-}
+};
 
-function startPainting() {
+const startPainting = () => {
   painting = true;
-}
+};
 
 const beginPath = (x, y) => {
   ctx.beginPath();
@@ -47,7 +47,16 @@ const strokePath = (x, y, color = null) => {
   ctx.strokeStyle = currentColor;
 };
 
-function onMouseMove(event) {
+const fill = (color = null) => {
+  const currentColor = ctx.fillStyle;
+  if (color !== null) {
+    ctx.fillStyle = color;
+  }
+  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+  ctx.fillStyle = currentColor;
+};
+
+const onMouseMove = (event) => {
   const x = event.offsetX;
   const y = event.offsetY;
   //console.log(x, y);
@@ -62,17 +71,17 @@ function onMouseMove(event) {
       color: ctx.strokeStyle,
     });
   }
-}
+};
 
-function handleColorClick(event) {
+const handleColorClick = (event) => {
   //console.log(event.target.style);
   const color = event.target.style.backgroundColor;
   //console.log(color);
   ctx.strokeStyle = color;
   ctx.fillStyle = color;
-}
+};
 
-function handleModeClick() {
+const handleModeClick = () => {
   if (filling === true) {
     filling = false;
     mode.innerText = "Fill";
@@ -80,19 +89,20 @@ function handleModeClick() {
     filling = true;
     mode.innerText = "Paint";
   }
-}
+};
 
-function handleCanvasClick() {
+const handleCanvasClick = () => {
   if (filling) {
-    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+    fill();
+    getSocket().emit(window.events.fill, { color: ctx.fillStyle });
   }
-}
+};
 
 //마우스 우클릭시 나오는 메뉴 차단
-function handleCM(event) {
+const handleCM = (event) => {
   //console.log(event);
   event.preventDefault();
-}
+};
 
 if (canvas) {
   canvas.addEventListener("mousemove", onMouseMove);
@@ -116,3 +126,4 @@ if (mode) {
 
 export const handleBeganPath = ({ x, y }) => beginPath(x, y);
 export const handleStrokedPath = ({ x, y, color }) => strokePath(x, y, color);
+export const handleFilled = ({ color }) => fill(color);
