@@ -1,6 +1,13 @@
-import { disableCanvas, hideControls } from "./paint";
+import {
+  disableCanvas,
+  enableCanvas,
+  hideControls,
+  resetCanvas,
+  showControls,
+} from "./paint";
 
 const board = document.getElementById("jsPBoard");
+const notifs = document.getElementById("jsNotifs");
 
 const addPlayers = (players) => {
   board.innerHTML = "";
@@ -11,10 +18,30 @@ const addPlayers = (players) => {
   });
 };
 
+const setNotifs = (text) => {
+  notifs.innerText = "";
+  notifs.innerText = text;
+};
+
 export const handlePlayerUpdate = ({ sockets }) => addPlayers(sockets);
 export const handleGameStarted = () => {
+  console.log("gameStarted");
+  setNotifs("");
   //disable canvas events
   disableCanvas();
   //hide the canvas controls
   hideControls();
+};
+
+export const handleLeaderNotif = ({ word }) => {
+  enableCanvas();
+  showControls();
+  setNotifs(`You are the leader, paint: ${word}`);
+};
+
+export const handleGameEnded = () => {
+  setNotifs("Game ended");
+  disableCanvas();
+  hideControls();
+  resetCanvas();
 };

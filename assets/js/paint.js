@@ -147,7 +147,12 @@ export const showControls = () => {
   controls.style.opacity = 1;
 };
 
+export const resetCanvas = () => {
+  fill("#fff");
+};
+
 if (canvas) {
-  enableCanvas();
+  //enableCanvas();
+  hideControls();
   canvas.addEventListener("contextmenu", handleCM);
 }

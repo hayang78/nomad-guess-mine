@@ -4,25 +4,31 @@ import { chooseWord } from "./words";
 let sockets = [];
 let inProgress = false;
 let word = null;
+let leader = null;
 
 const choooseLeader = () => sockets[Math.floor(Math.random() * sockets.length)];
 
 const socketController = (socket, io) => {
   const broadcast = (event, data) => socket.broadcast.emit(event, data); //자신을 제외한 소켓에 메시지를 보낸다.
-  const superBroadcase = (event, data) => io.emit(event, data); //전체 소켓에 메시지를 보낸다.
+  const superBroadcast = (event, data) => io.emit(event, data); //전체 소켓에 메시지를 보낸다.
   const sendPlayerUpdate = () =>
-    superBroadcase(events.playerUpdate, { sockets });
+    superBroadcast(events.playerUpdate, { sockets });
   const startGame = () => {
     if (inProgress === false) {
       inProgress = true;
-      const leader = choooseLeader();
+      leader = choooseLeader();
       word = chooseWord();
-      io.to(leader.id).emit(events.leaderNotif, { word });
-      superBroadcase(events.gameStarted);
+
+      setTimeout(() => {
+        superBroadcast(events.gameStarted);
+        io.to(leader.id).emit(events.leaderNotif, { word });
+      }, 2000);
     }
   };
   const endGame = () => {
     inProgress = false;
+    console.log("endgame");
+    superBroadcast(events.gameEnded);
   };
 
   socket.on(events.setNickname, ({ nickname }) => {
@@ -33,7 +39,7 @@ const socketController = (socket, io) => {
 
     broadcast(events.newUser, { nickname });
     sendPlayerUpdate();
-    if (sockets.length === 1) {
+    if (sockets.length === 2) {
       startGame();
     }
   });
@@ -41,7 +47,7 @@ const socketController = (socket, io) => {
   socket.on(events.disconnect, () => {
     console.log("disconnet");
     sockets = sockets.filter((aSocket) => aSocket.id !== socket.id);
-    if (sockets.length === 1) {
+    if (sockets.length === 1 || (leader && socket.id === leader.id)) {
       endGame();
     }
     broadcast(events.disconnected, { nickname: socket.nickname });
